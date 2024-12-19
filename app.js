@@ -15,22 +15,24 @@ const adminUserRouter = require("./routes/adminUser");
 const adminOrderRouter = require("./routes/adminOrder");
 const clientRouter = require("./routes/client");
 const reportRouter = require("./routes/report");
+const examRouter = require("./routes/exam");
+const questionRouter = require("./routes/question");
 const app = express();
 
 const port = process.env.PORT || 9000;
 
-// const MONGODB_URI = "mongodb://127.0.0.1:27017/fullstack_es6";
-
-// const MONGODB_URI =
-//   "mongodb+srv://nhatsang0101:48nJ1AfSQzAeKHoC@cluster0.aup360f.mongodb.net/e_learning";
 const MONGODB_URI = "mongodb+srv://e-learning-user:JDa27qF7e6mIm4sS@cluster0.n6je5.mongodb.net/e_learning";
 
-// app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(bodyParser.urlencoded({ extended: true }));
 
+// Parse JSON bodies (as sent by API clients)
+app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
+// CORS headers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, PATCH, DELETE");
@@ -41,7 +43,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// uploadCategoryMiddleware,
+// Routes
 app.use("/auth", authRouter);
 app.use("/admin", adminCategoryRouter);
 app.use("/admin", adminCourseRouter);
@@ -51,11 +53,12 @@ app.use("/admin", adminUserRouter);
 app.use("/admin", adminOrderRouter);
 app.use("/admin", reportRouter);
 app.use(clientRouter);
+app.use(examRouter);
+app.use(questionRouter);
 
-// Middleware handler error!!! (custom error here!!!)
+// Error handling middleware
 app.use((error, req, res, next) => {
   console.log(error);
-
   const status = error.statusCode || 500;
   const message = error.message;
   const errorType = error.errorType || "unknown";
@@ -68,6 +71,7 @@ app.use((error, req, res, next) => {
   });
 });
 
+// Database connection
 mongoose
   .connect(MONGODB_URI)
   .then((result) => {
