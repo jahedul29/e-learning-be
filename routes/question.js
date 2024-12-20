@@ -16,7 +16,7 @@ router.get("/questions/:examId/exam", isAuth, questionController.getQuestionsByE
 
 // POST create new question
 router.post(
-  "/question",
+  "/questions",
   isAuth,
   isAdmin,
   [
@@ -31,7 +31,7 @@ router.post(
 
 // PUT update question
 router.put(
-  "/question/:questionId",
+  "/questions/:questionId",
   isAuth,
   isAdmin,
   [

@@ -22,7 +22,9 @@ exports.getExams = async (req, res, next) => {
     // Base query with population
     const examQuery = Exam.find(query, {
       ...(query.$text && { score: { $meta: "textScore" } }),
-    }).populate("courseId", "_id name");
+    })
+    .populate("courseId", "_id name")
+    .populate("totalQuestions");
 
     // Handle pagination
     if (_page && _limit) {
@@ -64,7 +66,8 @@ exports.getExam = async (req, res, next) => {
 
   try {
     const exam = await Exam.findById(examId)
-      .populate("courseId", "_id name");
+      .populate("courseId", "_id name")
+      .populate("totalQuestions");
 
     if (!exam) {
       const error = new Error("Could not find exam!");

@@ -16,7 +16,7 @@ router.get("/exams/:courseId/course", isAuth, examController.getExamsByCourse);
 
 // POST create new exam
 router.post(
-  "/exam",
+  "/exams",
   isAuth,
   isAdmin,
   [
@@ -34,7 +34,7 @@ router.post(
 
 // PUT update exam
 router.put(
-  "/exam/:examId",
+  "/exams/:examId",
   isAuth,
   isAdmin,
   [

@@ -19,8 +19,20 @@ const examSchema = new Schema(
       // Optional field, so no required: true
     }
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
+
+// Virtual for question count
+examSchema.virtual('totalQuestions', {
+  ref: 'Question',
+  localField: '_id',
+  foreignField: 'examId',
+  count: true
+});
 
 // Define text index for search
 examSchema.index({ title: "text", description: "text" });
